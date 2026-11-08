@@ -2,7 +2,7 @@
 
 An English portfolio for full-stack job applications, built with React, TypeScript, Vite, and custom CSS. The hero uses the original illustration embedded in the owner's `header.svg`.
 
-**Status:** implemented and tested locally. Vercel configuration is included; account connection and publication are pending.
+**Status:** deployed on Vercel. Production: [tai130203-portfolio.vercel.app](https://tai130203-portfolio.vercel.app/). The implementation was pushed to `main` and the production URL returned HTTP 200 on 8 November 2026.
 
 ## Run locally
 
@@ -58,7 +58,7 @@ npx vercel link
 npx vercel --prod
 ```
 
-A connected account and a successful returned deployment URL are required before hosting is complete. No project ID or production URL is assumed.
+The Vercel project is connected to this repository. Pushes to `main` trigger production deployments.
 
 ## Direction
 
