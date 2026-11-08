@@ -23,10 +23,15 @@ npm run preview
 ## Content
 
 - Edit name, links, projects, and skills in [`src/content/portfolio.ts`](./src/content/portfolio.ts).
-- Hero, About, and Contact copy lives in [`src/App.tsx`](./src/App.tsx).
-- Styling lives in [`src/styles/main.css`](./src/styles/main.css).
+- Hero copy and its scroll sequence live in [`src/sections/Hero.tsx`](./src/sections/Hero.tsx). About and Contact copy live in [`src/App.tsx`](./src/App.tsx).
+- Base styling lives in [`src/styles/main.css`](./src/styles/main.css); typography and interactions live in [`src/styles/experience.css`](./src/styles/experience.css).
 - Project details use native modal dialogs with Escape, focus containment, focus return, and a visible close button.
 - WOFF2 fonts and responsive WebP hero images (25/68 KB) are self-hosted. Font licenses are included beside the font files.
+- Like the reference, headings use Space Mono with real bold/italic fonts; reading text uses IBM Plex Sans. Newsreader is reserved for the personal mark.
+
+The desktop hero stays in view as scrolling moves into the portal, then reveals a short statement word by word. This sequence uses passive scroll events and animation-frame updates rather than a continuously running animation. Narrow or short viewports and reduced-motion preferences show the same content in normal page flow. Navigation links can skip straight to the work or contact.
+
+Project cards have pointer lighting and subtle tilt; the header stays available with reading progress. Click or keyboard-activate the orbit in About for a small visual spark. Touch and reduced-motion users keep the same actions and readable content without the extra motion. No animation dependency is required.
 
 SE_104 is labeled as desktop/data-access work; QLDA is labeled as frontend work. Their visuals show public-source excerpts, not application screenshots. Personal contribution, screenshots, email, LinkedIn, and a public CV still need owner-supplied details. Unverified employment, metrics, backend integrations, and live demos are omitted.
 
@@ -38,9 +43,9 @@ npm run build
 npm test
 ```
 
-Browser checks cover 375, 768, and 1440 px layouts, horizontal overflow, JavaScript errors, dialogs, Escape, focus restoration, mobile navigation, reduced motion, and link destinations. Tests use Microsoft Edge. On a machine without Edge, install it with `npx playwright install msedge`, or change the browser channel in `playwright.config.ts`. Screenshots go to the ignored `test-results/` directory.
+Nine browser checks cover 375, 768, and 1440 px layouts, horizontal overflow, JavaScript errors, dialogs, Escape, focus restoration, mobile navigation, scroll-story reversal, changes to motion preferences and viewport size, pointer/touch behavior, the keyboard-activated orbit, and link destinations. Tests use Microsoft Edge. On a machine without Edge, install it with `npx playwright install msedge`, or change the browser channel in `playwright.config.ts`. Screenshots go to the ignored `test-results/` directory. For the pinned hero, inspect individual scroll positions; a full-page screenshot at the beginning does not show the later story state.
 
-Verified on 8 November 2026: type checking and the production build pass; all five browser tests pass. A local production-preview Lighthouse 12 mobile run returned Performance **97**, Accessibility **100**, Best Practices **100**, and SEO **100**. These are lab results, not production or field measurements. Public profile, repository, and source links returned HTTP 200.
+Verified on 8 November 2026: type checking and the production build pass; all nine browser tests pass. The interaction update's local production-preview Lighthouse 12 mobile run returned Performance **95**, Accessibility **100**, Best Practices **100**, and SEO **100** (LCP 2.5 s, CLS 0.001). These are lab results, not production or field measurements. Public profile, repository, and source links returned HTTP 200.
 
 ## Vercel
 

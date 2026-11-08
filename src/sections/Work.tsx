@@ -1,4 +1,5 @@
 import { projects, type Project } from '../content/portfolio';
+import { trackPointer } from '../interactions';
 
 export default function Work({ onSelect }: { onSelect: (project: Project) => void }) {
   return <section className="section work" id="work" aria-labelledby="work-title">
@@ -8,7 +9,7 @@ export default function Work({ onSelect }: { onSelect: (project: Project) => voi
     </div>
     <div className="project-grid">
       {projects.map(project => <article className={`project reveal ${project.id}`} key={project.id}>
-        <button className="project-visual" onClick={() => onSelect(project)} aria-label={`Explore ${project.title}`}>
+        <button className="project-visual" onPointerMove={trackPointer} onClick={() => onSelect(project)} aria-label={`Explore ${project.title}`}>
           <span className="visual-heading"><span>{project.id === 'library' ? 'APPLICATION / DATA' : 'INTERFACE / COMPONENTS'}</span><span>{project.number}</span></span>
           <span className="code-window">
             <span className="window-bar"><span className="window-dots" aria-hidden="true"><i /><i /><i /></span><span>{project.filename}</span><span aria-hidden="true">⌘</span></span>

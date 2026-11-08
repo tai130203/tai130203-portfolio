@@ -31,7 +31,9 @@ for (const width of [375, 768, 1440]) {
     await expect(dialog).not.toBeVisible();
     expect(errors).toEqual([]);
 
-    await page.locator('#home').scrollIntoViewIfNeeded();
+    await page.getByRole('link', { name: /TAI130203.*back to top/ }).click();
+    await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(0);
+    await expect(page.locator('.hero-copy')).toHaveCSS('visibility', 'visible');
     await page.screenshot({ path: `test-results/portfolio-${width}.png`, fullPage: true, animations: 'disabled' });
   });
 }
@@ -52,6 +54,72 @@ test('mobile navigation works with a keyboard and closes with Escape', async ({ 
   await page.getByRole('navigation').getByRole('link', { name: 'Work', exact: true }).click();
   await expect(page).toHaveURL(/#work$/);
   await expect(page.getByRole('navigation')).not.toBeVisible();
+});
+
+test('desktop scroll reveals the portal story, supports direct navigation and reverses', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const runway = page.locator('.hero-runway');
+  const story = page.locator('.hero-story');
+  await expect(runway).toHaveClass(/scene-active/);
+  await expect(story).toHaveJSProperty('inert', true);
+  await page.evaluate(() => {
+    const runway = document.querySelector<HTMLElement>('.hero-runway')!;
+    window.scrollTo({ top: (runway.offsetHeight - innerHeight) * .94, behavior: 'instant' });
+  });
+  await expect(story).toHaveCSS('opacity', '1');
+  await expect(story).toHaveJSProperty('inert', false);
+  await expect(page.locator('.hero-copy')).toHaveJSProperty('inert', true);
+  for (const word of await page.locator('.story-word').all()) await expect(word).toHaveCSS('opacity', '1');
+  expect(await page.locator('.reading-progress span').evaluate(element => parseFloat(element.style.transform.slice(7)))).toBeGreaterThan(0);
+  await story.getByRole('link', { name: 'Meet the work' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#work$/);
+  await expect(page.getByRole('button', { name: 'Explore Library Management', exact: true })).toBeInViewport();
+  await page.getByRole('link', { name: /TAI130203.*back to top/ }).click();
+  await expect(page.locator('.hero-copy')).toHaveJSProperty('inert', false);
+  await expect(story).toHaveJSProperty('inert', true);
+});
+
+test('motion preferences and viewport changes restore the static story', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await page.evaluate(() => window.scrollTo({ top: innerHeight * .8, behavior: 'instant' }));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('.hero-runway')).not.toHaveClass(/scene-active/);
+  await expect(page.locator('.hero-story')).toHaveJSProperty('inert', false);
+  await expect(page.locator('.hero-copy')).toHaveJSProperty('inert', false);
+  for (const word of await page.locator('.story-word').all()) await expect(word).toHaveCSS('opacity', '1');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expect(page.locator('.hero-runway')).toHaveClass(/scene-active/);
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(page.locator('.hero-runway')).not.toHaveClass(/scene-active/);
+  await expect(page.locator('.hero-story')).toHaveJSProperty('inert', false);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('project lighting responds to a mouse and ignores touch and reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const card = page.getByRole('button', { name: 'Explore Library Management', exact: true });
+  await card.hover({ position: { x: 45, y: 50 } });
+  const position = await card.evaluate(element => element.style.getPropertyValue('--pointer-x'));
+  expect(position).not.toBe('');
+  await card.dispatchEvent('pointermove', { pointerType: 'touch', clientX: 900, clientY: 900 });
+  expect(await card.evaluate(element => element.style.getPropertyValue('--pointer-x'))).toBe(position);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await card.dispatchEvent('pointermove', { pointerType: 'mouse', clientX: 1000, clientY: 1000 });
+  expect(await card.evaluate(element => element.style.getPropertyValue('--pointer-x'))).toBe(position);
+  await expect(card).toHaveCSS('transform', 'none');
+});
+
+test('the orbit spark works by keyboard with reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Send a little spark' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status')).toContainText('A LITTLE CURIOSITY GOES A LONG WAY.');
+  await expect(page.locator('.orbit-pulse')).toHaveCSS('display', 'none');
 });
 
 test('reduced motion keeps all sections readable and links use real destinations', async ({ page }) => {
