@@ -1,5 +1,7 @@
 # Portfolio analysis and implementation plan
 
+> Implementation update — 8 November 2026: the user has authorized building the portfolio and configuring Vercel. React, TypeScript, Vite, the core sections, source-backed project dialogs, responsive styles, and `vercel.json` are implemented. Type checking, a production build, and five browser checks pass at 375/768/1440 px. A local production-preview Lighthouse 12 mobile run scored Performance 97, Accessibility 100, Best Practices 100, and SEO 100; these are lab measurements. The supplied `header.svg` provides the original portal illustration, delivered as responsive WebP with self-hosted WOFF2 fonts. Project visuals are explicitly labeled public-source previews because application screenshots and personal contribution details have not been supplied. Vercel account connection and publication remain pending. The planning-stage restrictions below record the original brief rather than the current implementation scope.
+
 ## 1. Confirmed brief
 
 | Item | Decision |
