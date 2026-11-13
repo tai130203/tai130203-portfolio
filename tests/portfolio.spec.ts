@@ -133,7 +133,8 @@ test('reduced motion keeps all sections readable and links use real destinations
     expect(href).toBeTruthy();
     expect(href).not.toBe('#');
     if (href!.startsWith('#')) await expect(page.locator(href!)).toHaveCount(1);
-    else expect(new URL(href!).hostname).toBe('github.com');
+    else if (href!.startsWith('mailto:')) expect(href).toBe('mailto:nanh02465@gmail.com');
+    else expect(['github.com', 'www.linkedin.com']).toContain(new URL(href!).hostname);
   }
 });
 
@@ -190,4 +191,15 @@ test('the logbook keeps one note open at a time', async ({ page }) => {
   await expect(notes.nth(0)).not.toHaveAttribute('open', '');
   await expect(notes.nth(2)).toContainText('If the page works without the effect');
   await expect(page.locator('.about-details time')).toHaveText(/^\d{2}:\d{2} · GMT\+7$/);
+});
+
+test('contact offers email, LinkedIn and GitHub, and icons are drawn as SVG', async ({ page }) => {
+  await page.goto('/');
+  const contact = page.locator('#contact');
+  await expect(contact.getByRole('link', { name: 'Say hello by email' })).toHaveAttribute('href', 'mailto:nanh02465@gmail.com');
+  await expect(contact.getByRole('link', { name: /Email/ }).last()).toHaveAttribute('href', 'mailto:nanh02465@gmail.com');
+  await expect(contact.getByRole('link', { name: /LinkedIn/ })).toHaveAttribute('href', /^https:\/\/www\.linkedin\.com\/in\/.+12a07b328\/$/);
+  await expect(contact.getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/tai130203');
+  await expect(contact.locator('.channels svg.icon')).toHaveCount(6);
+  expect(await page.locator('main').evaluate(element => /[↗↑↓✦⌖☰⇄▤◐▶◌⌘]/.test(element.textContent!))).toBe(false);
 });

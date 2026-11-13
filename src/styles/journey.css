@@ -151,3 +151,33 @@
 .chips li,.text-link,.skill-evidence,.project-actions,.back-top,.hero-intro,.section-heading>p{font-weight:500}
 .section-heading>p .muted{font-weight:400}
 .hero-intro strong{font-weight:600}
+
+/* Icons: one SVG set replaces the Unicode glyphs, which each fell back to a different system font. */
+.icon{display:inline-block;flex:none;width:1em;height:1em;vertical-align:-.16em}
+.icon-arrow,.icon-up,.icon-down{scale:1.15}
+.icon-spark{scale:.72}
+.skill-icon{display:grid;place-items:center;width:46px;height:46px;border:1px solid #f8bb9838;border-radius:12px;background:#f8bb980f;font-size:22px}
+.station-node{font-size:21px}
+.menu-toggle{font-size:22px}
+.dialog-close{display:grid;place-items:center;font-size:18px}
+.log-toggle{font-size:16px}
+.window-bar>span:last-child{font-size:13px;color:#6f7f98}
+.trace-play>span{display:grid;font-size:15px}
+.trace-play:disabled>span{font-size:14px}
+.hero-location>span{font-size:15px}
+.about-details p>span{font-size:15px}
+.contact-spark{font-size:30px;line-height:1}
+.contact .button{margin-top:4px}
+
+/* Contact channels. */
+.channels{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:880px;margin:40px auto 0;padding:0;text-align:left}
+.channels a{display:flex;align-items:center;gap:14px;min-height:70px;padding:14px 16px;border:1px solid #a6b8d524;border-radius:12px;background:#0c1626c7;transition:border-color .3s,background .3s,translate .3s}
+.channels a:hover{border-color:#f8bb9870;background:#131d2e;translate:0 -2px}
+.channel-icon{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:10px;background:#f8bb9814;color:var(--peach);font-size:18px}
+.channel-text{display:grid;gap:4px;min-width:0}
+.channel-text>span{font:700 11px var(--mono);letter-spacing:1.6px;text-transform:uppercase;color:#8a9bb3}
+.channel-text>strong{overflow:hidden;font-size:14px;font-weight:500;color:#dfe5ee;text-overflow:ellipsis;white-space:nowrap}
+.channel-arrow{margin-left:auto;font-size:17px;color:#7d8ca4;transition:color .3s,translate .3s}
+.channels a:hover .channel-arrow{color:var(--peach);translate:2px -2px}
+@media(max-width:800px){.channels{grid-template-columns:minmax(0,1fr);max-width:400px;margin-top:32px}}
+@media(max-width:600px){.station-node{font-size:17px}.skill-icon{width:42px;height:42px;font-size:20px}.contact-spark{font-size:26px}}

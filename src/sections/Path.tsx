@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { projects, stations, type Project } from '../content/portfolio';
+import Icon from '../components/Icon';
 
 const last = stations.length - 1;
 
@@ -52,7 +53,7 @@ export default function Path({ onSelect }: { onSelect: (project: Project) => voi
           className={`station ${item.status} ${i <= active ? 'reached' : ''}`}
           onClick={() => choose(i)}
         >
-          <span className="station-node" aria-hidden="true">{item.symbol}</span>
+          <span className="station-node" aria-hidden="true"><Icon name={item.icon} /></span>
           <span className="station-label">{item.label}</span>
         </button>)}
       </div>
@@ -65,11 +66,11 @@ export default function Path({ onSelect }: { onSelect: (project: Project) => voi
         <div className={`trace-evidence ${station.status}`} key={`${station.id}-evidence`}>
           <span>{project ? `EVIDENCE / ${project.title.toUpperCase()}` : 'AN HONEST GAP'}</span>
           <p>{station.evidence}</p>
-          {project && <button className="text-link" onClick={() => onSelect(project)} aria-label={`Open the ${project.title} case study`}>Open the case study <span aria-hidden="true">↗</span></button>}
+          {project && <button className="text-link" onClick={() => onSelect(project)} aria-label={`Open the ${project.title} case study`}>Open the case study <span aria-hidden="true"><Icon name="arrow" /></span></button>}
         </div>
       </div>
       <div className="trace-controls">
-        <button className="trace-play" onClick={() => { setActive(0); setTracing(true); }} disabled={tracing}><span aria-hidden="true">{tracing ? '◌' : '▶'}</span> {tracing ? 'Tracing…' : 'Trace a request'}</button>
+        <button className="trace-play" onClick={() => { setActive(0); setTracing(true); }} disabled={tracing}><span aria-hidden="true"><Icon name={tracing ? 'loader' : 'play'} /></span> {tracing ? 'Tracing…' : 'Trace a request'}</button>
         <span className="trace-hint" aria-hidden="true">← → TO MOVE BETWEEN STOPS</span>
         <span className="trace-count" aria-hidden="true">{String(active + 1).padStart(2, '0')} / {String(stations.length).padStart(2, '0')}</span>
       </div>

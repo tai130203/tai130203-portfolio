@@ -1,4 +1,5 @@
 import { notes } from '../content/portfolio';
+import Icon from '../components/Icon';
 
 /** A short logbook: one lesson per project, kept in native disclosure elements. */
 export default function Notes() {
@@ -13,12 +14,12 @@ export default function Notes() {
           <span className="log-id">LOG {String(i + 1).padStart(2, '0')}</span>
           <h3>{note.title}</h3>
           <span className="log-source">{note.source}</span>
-          <span className="log-toggle" aria-hidden="true">+</span>
+          <span className="log-toggle" aria-hidden="true"><Icon name="plus" /></span>
         </summary>
         <div className="log-body">
           <p>{note.body}</p>
-          <p className="log-takeaway"><span aria-hidden="true">✦</span> {note.takeaway}</p>
-          <a className="text-link" href={note.url} target="_blank" rel="noreferrer">{note.link} <span aria-hidden="true">↗</span></a>
+          <p className="log-takeaway"><span aria-hidden="true"><Icon name="spark" /></span> {note.takeaway}</p>
+          <a className="text-link" href={note.url} target="_blank" rel="noreferrer">{note.link} <span aria-hidden="true"><Icon name="arrow" /></span></a>
         </div>
       </details>)}
     </div>

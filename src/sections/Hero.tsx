@@ -3,6 +3,7 @@ import portal from '../assets/portal.webp';
 import portalSmall from '../assets/portal-640.webp';
 import { profile } from '../content/portfolio';
 import { trackPointer } from '../interactions';
+import Icon from '../components/Icon';
 
 const statement = 'Curiosity starts it. Careful code brings it to life.';
 
@@ -83,19 +84,19 @@ export default function Hero() {
           <h1 id="hero-title">From curiosity<br />to <em>working code.</em></h1>
           <p className="hero-intro">Hi, I’m <strong>{profile.name}.</strong></p>
           <p className="hero-description">I build Java applications and React interfaces, connect ideas with data, and keep learning along the way. My next chapter: full-stack development.</p>
-          <div className="hero-actions"><a className="button primary" href="#work">Explore my work <span aria-hidden="true">↗</span></a><a className="button secondary" href="#contact">Let’s connect <span aria-hidden="true">↗</span></a></div>
-          <p className="hero-location"><span aria-hidden="true">⌖</span> {profile.location}</p>
+          <div className="hero-actions"><a className="button primary" href="#work">Explore my work <span aria-hidden="true"><Icon name="arrow" /></span></a><a className="button secondary" href="#contact">Let’s connect <span aria-hidden="true"><Icon name="arrow" /></span></a></div>
+          <p className="hero-location"><span aria-hidden="true"><Icon name="pin" /></span> {profile.location}</p>
         </div>
-        <a className="portal-caption" href="#work"><span className="tiny-star" aria-hidden="true">✦</span> STEP INSIDE <span aria-hidden="true">↗</span></a>
-        <div className="hero-bottom"><a href="#work" className="scroll-link"><span className="mouse" aria-hidden="true" /> SCROLL TO EXPLORE</a><span>IMAGINATION MEETS IMPLEMENTATION <span aria-hidden="true">✦</span></span></div>
+        <a className="portal-caption" href="#work"><span className="tiny-star" aria-hidden="true"><Icon name="spark" /></span> STEP INSIDE <span aria-hidden="true"><Icon name="arrow" /></span></a>
+        <div className="hero-bottom"><a href="#work" className="scroll-link"><span className="mouse" aria-hidden="true" /> SCROLL TO EXPLORE</a><span>IMAGINATION MEETS IMPLEMENTATION <span aria-hidden="true"><Icon name="spark" /></span></span></div>
       </section>
       <section className="hero-story" aria-labelledby="story-title">
-        <div className="story-orbit" aria-hidden="true"><i /><i /><span>✦</span></div>
+        <div className="story-orbit" aria-hidden="true"><i /><i /><span><Icon name="spark" /></span></div>
         <div className="story-content">
           <p className="eyebrow">00 / THE IDEA BEHIND THE WORK</p>
           <h2 id="story-title" aria-label={statement}>{statement.split(' ').map((word, i) => <Fragment key={i}>{i === 3 && <br />}<span className={`story-word ${i > 2 ? 'accent' : ''}`} aria-hidden="true">{word}{' '}</span></Fragment>)}</h2>
           <p>A sketch becomes an interface. A component becomes a system.<br />I enjoy connecting the pieces, one thoughtful detail at a time.</p>
-          <a href="#work" className="story-next">Meet the work <span aria-hidden="true">↓</span></a>
+          <a href="#work" className="story-next">Meet the work <span aria-hidden="true"><Icon name="down" /></span></a>
         </div>
         <div className="story-chapters" aria-hidden="true"><span>01 / CURIOSITY</span><i /><span>02 / CRAFT</span><i /><span>03 / CODE</span></div>
       </section>

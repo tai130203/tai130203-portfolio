@@ -3,7 +3,16 @@ export const profile = {
   handle: 'tai130203',
   location: 'Ho Chi Minh City, Vietnam',
   github: 'https://github.com/tai130203',
+  email: 'nanh02465@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/t%C3%A0i-%C4%91o%C3%A0n-c%C3%B4ng-12a07b328/',
 };
+
+/** Ways to get in touch, in the order they appear in Contact. */
+export const channels = [
+  { label: 'Email', value: profile.email, url: `mailto:${profile.email}`, icon: 'mail' },
+  { label: 'LinkedIn', value: 'Tài Đoàn Công', url: profile.linkedin, icon: 'linkedin' },
+  { label: 'GitHub', value: `@${profile.handle}`, url: profile.github, icon: 'github' },
+];
 
 export const navigation = [
   { id: 'work', label: 'Work' },
@@ -106,15 +115,15 @@ export const projects: Project[] = [
 ];
 
 export const skillGroups = [
-  { number: '01', symbol: '</>', title: 'Interfaces', description: 'From a reusable component to a page that feels considered.', tags: ['React', 'JavaScript', 'HTML & CSS', 'Sass'], evidence: 'In practice: Management Dashboard', project: 'dashboard' },
-  { number: '02', symbol: '{ }', title: 'Applications & data', description: 'The logic and relationships that make an application useful.', tags: ['Java', 'Swing', 'Hibernate', 'JDBC', 'SQL'], evidence: 'In practice: Library Management', project: 'library' },
-  { number: '03', symbol: '↗', title: 'Tools & workflow', description: 'Readable source, versioned changes, and a clear path to the build.', tags: ['Git', 'GitHub', 'TypeScript', 'Vite'], evidence: 'Explore this portfolio’s source', url: 'https://github.com/tai130203/tai130203-portfolio' },
+  { number: '01', icon: 'layout', title: 'Interfaces', description: 'From a reusable component to a page that feels considered.', tags: ['React', 'JavaScript', 'HTML & CSS', 'Sass'], evidence: 'In practice: Management Dashboard', project: 'dashboard' },
+  { number: '02', icon: 'data', title: 'Applications & data', description: 'The logic and relationships that make an application useful.', tags: ['Java', 'Swing', 'Hibernate', 'JDBC', 'SQL'], evidence: 'In practice: Library Management', project: 'library' },
+  { number: '03', icon: 'branch', title: 'Tools & workflow', description: 'Readable source, versioned changes, and a clear path to the build.', tags: ['Git', 'GitHub', 'TypeScript', 'Vite'], evidence: 'Explore this portfolio’s source', url: 'https://github.com/tai130203/tai130203-portfolio' },
 ];
 
 export interface Station {
   id: string;
   label: string;
-  symbol: string;
+  icon: string;
   status: 'built' | 'next';
   title: string;
   detail: string;
@@ -125,34 +134,34 @@ export interface Station {
 /** The layers a request passes through, each tied to what the public projects actually show. */
 export const stations: Station[] = [
   {
-    id: 'interface', label: 'Interface', symbol: '</>', status: 'built',
+    id: 'interface', label: 'Interface', icon: 'layout', status: 'built',
     title: 'What people see and touch.',
     detail: 'React pages and Sass-styled components in the Management Dashboard, Swing views in Library Management. Different toolkits, the same job: make the next action obvious.',
     evidence: 'Employee, calendar, document, profile, and request pages.',
     project: 'dashboard',
   },
   {
-    id: 'routing', label: 'Routing', symbol: '⇄', status: 'built',
+    id: 'routing', label: 'Routing', icon: 'route', status: 'built',
     title: 'Every action finds its place.',
     detail: 'One route table maps each page to its component and layout. Most pages share a header and sidebar; the login page stands on its own.',
     evidence: 'src / App.js, the route table.',
     project: 'dashboard',
   },
   {
-    id: 'api', label: 'API', symbol: '···', status: 'next',
+    id: 'api', label: 'API', icon: 'bridge', status: 'next',
     title: 'The bridge between two worlds.',
     detail: 'An HTTP API is what lets a web interface talk to application logic and a database. My public projects cover both sides of this bridge, but not yet the bridge itself.',
     evidence: 'Not in a public project yet. This is the full-stack step I’m working toward, and I’d rather say so than imply it.',
   },
   {
-    id: 'logic', label: 'Logic', symbol: '{ }', status: 'built',
+    id: 'logic', label: 'Logic', icon: 'braces', status: 'built',
     title: 'Rules live in one place.',
     detail: 'In Library Management, controllers sit between the views and the data layer. They turn what a user does on screen into what the application should do next.',
     evidence: 'The Control module, between View and DAO.',
     project: 'library',
   },
   {
-    id: 'data', label: 'Data', symbol: '▤', status: 'built',
+    id: 'data', label: 'Data', icon: 'data', status: 'built',
     title: 'Relationships worth keeping.',
     detail: 'DAO classes and Hibernate entities persist books together with their authors and categories, and assemble what each view needs.',
     evidence: 'Model / SachModel.java, the book entity.',
