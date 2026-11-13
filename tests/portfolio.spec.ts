@@ -10,7 +10,7 @@ for (const width of [375, 768, 1440]) {
     await expect(page.getByText('Hi, I’m')).toContainText('Đoàn Công Tài');
     expect(await page.locator('.hero-art img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0 && image.naturalWidth === image.naturalHeight)).toBe(true);
 
-    for (const id of ['work', 'skills', 'about', 'contact']) {
+    for (const id of ['work', 'path', 'skills', 'notes', 'about', 'contact']) {
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     }
@@ -46,14 +46,14 @@ test('mobile navigation works with a keyboard and closes with Escape', async ({ 
   const menu = page.getByRole('button', { name: 'Open navigation' });
   await menu.focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('navigation')).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeFocused();
-  await expect(page.getByRole('navigation')).not.toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).not.toBeVisible();
   await menu.click();
-  await page.getByRole('navigation').getByRole('link', { name: 'Work', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Work', exact: true }).click();
   await expect(page).toHaveURL(/#work$/);
-  await expect(page.getByRole('navigation')).not.toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).not.toBeVisible();
 });
 
 test('desktop scroll reveals the portal story, supports direct navigation and reverses', async ({ page }) => {
@@ -135,4 +135,59 @@ test('reduced motion keeps all sections readable and links use real destinations
     if (href!.startsWith('#')) await expect(page.locator(href!)).toHaveCount(1);
     else expect(new URL(href!).hostname).toBe('github.com');
   }
+});
+
+test('the request path works as tabs, traces itself and opens case studies', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const tabs = page.getByRole('tablist', { name: 'Layers of a request' });
+  const panel = page.getByRole('tabpanel');
+  await expect(tabs.getByRole('tab')).toHaveCount(5);
+  await expect(tabs.getByRole('tab', { name: 'Interface' })).toHaveAttribute('aria-selected', 'true');
+  await tabs.getByRole('tab', { name: 'Interface' }).focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  await expect(tabs.getByRole('tab', { name: 'API' })).toBeFocused();
+  await expect(panel).toContainText('NEXT CHAPTER');
+  await expect(panel).toContainText('Not in a public project yet');
+  await expect(panel.getByRole('button')).toHaveCount(0);
+  await page.keyboard.press('End');
+  await expect(panel).toContainText('Relationships worth keeping.');
+  await panel.getByRole('button', { name: 'Open the Library Management case study' }).click();
+  await expect(page.getByRole('dialog').getByRole('heading', { name: 'Library Management', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: 'Trace a request' }).click();
+  await expect(tabs.getByRole('tab', { name: 'Interface' })).toHaveAttribute('aria-selected', 'true');
+  await expect(tabs.getByRole('tab', { name: 'Data' })).toHaveAttribute('aria-selected', 'true', { timeout: 8000 });
+  await expect(page.getByRole('button', { name: 'Trace a request' })).toBeEnabled();
+});
+
+test('the constellation map follows the page on desktop and stays out of the way on phones', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const map = page.getByRole('navigation', { name: 'Section map' });
+  await expect(map).toBeVisible();
+  await expect(map.getByRole('link')).toHaveCount(7);
+  await expect(map.getByRole('link', { name: 'Start' })).toHaveAttribute('aria-current', 'location');
+  await map.getByRole('link', { name: 'Notes' }).click();
+  await expect(page).toHaveURL(/#notes$/);
+  await expect(map.getByRole('link', { name: 'Notes' })).toHaveAttribute('aria-current', 'location');
+  await expect(page.locator('.starfield')).toHaveCSS('pointer-events', 'none');
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(map).not.toBeVisible();
+});
+
+test('the logbook keeps one note open at a time', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const notes = page.locator('.log details');
+  await expect(notes).toHaveCount(3);
+  await expect(notes.nth(0)).toHaveAttribute('open', '');
+  await notes.nth(2).locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(notes.nth(2)).toHaveAttribute('open', '');
+  await expect(notes.nth(0)).not.toHaveAttribute('open', '');
+  await expect(notes.nth(2)).toContainText('If the page works without the effect');
+  await expect(page.locator('.about-details time')).toHaveText(/^\d{2}:\d{2} · GMT\+7$/);
 });
